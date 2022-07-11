@@ -9,6 +9,7 @@ import (
 	"os/signal"
 
 	"github.com/BililiveRecorder/BililiveRecorder-Tray/modules/httpServer"
+	"github.com/BililiveRecorder/BililiveRecorder-Tray/modules/systemTray"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -35,10 +36,11 @@ func Main(assets fs.FS) {
 	httpChan := make(chan os.Signal)
 	go httpServer.Main(assets, config.ListenPort, config.ListenHost, httpChan)
 	signal.Notify(mainChan, os.Interrupt)
+	go systemTray.Setup(mainChan)
 	<-mainChan
 	log.Println("Shutdown Server ...")
 	httpChan <- os.Interrupt
-
+	systemTray.Quit()
 }
 
 func readConfig() {
