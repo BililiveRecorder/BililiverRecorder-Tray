@@ -7,9 +7,10 @@ import (
 	"io/fs"
 	"os"
 	"os/signal"
+	"sync"
 
-	"github.com/BililiveRecorder/BililiveRecorder-Tray/internal/httpServer"
 	"github.com/BililiveRecorder/BililiveRecorder-Tray/internal/systemTray"
+	trayserver "github.com/BililiveRecorder/BililiveRecorder-Tray/internal/trayServer"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -33,14 +34,15 @@ func Main(assets fs.FS) {
 	log.Info("Config: ", config)
 	log.Info("Staring...")
 	mainChan := make(chan os.Signal)
-	httpChan := make(chan os.Signal)
-	go httpServer.Main(assets, config.ListenPort, config.ListenHost, httpChan)
+	server := trayserver.Create(assets, config.ListenPort, config.ListenHost)
 	signal.Notify(mainChan, os.Interrupt)
 	go systemTray.Setup(mainChan)
 	<-mainChan
+	var wg sync.WaitGroup
 	log.Println("Shutdown Server ...")
-	httpChan <- os.Interrupt
+	server.Shutdown(&wg)
 	systemTray.Quit()
+	wg.Wait()
 }
 
 func readConfig() {
