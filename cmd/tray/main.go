@@ -8,8 +8,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/BililiveRecorder/BililiveRecorder-Tray/modules/httpServer"
-	"github.com/BililiveRecorder/BililiveRecorder-Tray/modules/systemTray"
+	"github.com/BililiveRecorder/BililiveRecorder-Tray/internal/httpServer"
+	"github.com/BililiveRecorder/BililiveRecorder-Tray/internal/systemTray"
 	log "github.com/sirupsen/logrus"
 )
 
