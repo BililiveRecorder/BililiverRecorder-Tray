@@ -1,4 +1,4 @@
-package trayserver
+package trayServer
 
 import (
 	"context"

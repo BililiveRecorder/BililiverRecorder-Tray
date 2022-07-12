@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/BililiveRecorder/BililiveRecorder-Tray/internal/systemTray"
-	trayserver "github.com/BililiveRecorder/BililiveRecorder-Tray/internal/trayServer"
+	"github.com/BililiveRecorder/BililiveRecorder-Tray/internal/trayServer"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -34,7 +34,7 @@ func Main(assets fs.FS) {
 	log.Info("Config: ", config)
 	log.Info("Staring...")
 	mainChan := make(chan os.Signal)
-	server := trayserver.Create(assets, config.ListenPort, config.ListenHost)
+	server := trayServer.Create(assets, config.ListenPort, config.ListenHost)
 	signal.Notify(mainChan, os.Interrupt)
 	go systemTray.Setup(mainChan)
 	<-mainChan
