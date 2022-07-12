@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"os"
 
-	"fyne.io/systray"
+	"github.com/skycoin/systray"
 )
 
 //go:embed icon.ico
